@@ -41,7 +41,7 @@ class OrderStore {
     Optional<OrderCreated> find(UUID orderId) {
         return jdbc.sql("""
                 SELECT e.event_id, o.id AS order_id, o.sku, o.quantity, o.created_at
-                FROM orders o JOIN outbox_events e ON e.order_id = o.id
+                FROM orders o LEFT JOIN outbox_events e ON e.order_id = o.id
                 WHERE o.id = ?
                 """).param(orderId).query(OrderCreated.class).optional();
     }
